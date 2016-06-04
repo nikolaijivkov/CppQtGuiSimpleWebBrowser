@@ -7,10 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
     nam {new QNetworkAccessManager(this)}
 {
     ui->setupUi(this);
+    ui->goBtn->installEventFilter(this);
 
     ui->progressBar->hide();
-    ui->webEngineView->load(QUrl("http://www.google.com"));
-                          //QUrl("https://embed.gog.com"));  // it looks nice, and it's gameing site, so... win win
+    ui->webEngineView->load(QUrl("https://embed.gog.com"));  // it looks nice, and it's gameing site, so... win win
 
     //navigation buttons connections
     connect(ui->goBackBtn, &QPushButton::clicked, ui->webEngineView, &QWebEngineView::back);
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //webEngine icon related connections - detect iconUrlChanged, download and set new icon to MainWindow
     connect(ui->webEngineView, &QWebEngineView::iconUrlChanged, this, &MainWindow::setIconUrl);
-    connect(nam, &QNetworkAccessManager::finished, this, &MainWindow::finishedIconRequest);
+    connect(nam, &QNetworkAccessManager::finished, this, &MainWindow::setIconFromNetworkReply);
 }
 
 MainWindow::~MainWindow()
@@ -45,6 +45,7 @@ void MainWindow::setUrl()
     }
 }
 
+
 void MainWindow::setIconUrl(const QUrl &iconUrl)
 {
     if (!iconUrl.isEmpty() && currentIconUrl!=iconUrl){
@@ -53,7 +54,7 @@ void MainWindow::setIconUrl(const QUrl &iconUrl)
     }
 }
 
-void MainWindow::finishedIconRequest(QNetworkReply* reply)
+void MainWindow::setIconFromNetworkReply(QNetworkReply* reply)
 {
     QPixmap pixmap;
     pixmap.loadFromData(reply->readAll());

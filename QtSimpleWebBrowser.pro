@@ -4,14 +4,16 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network widgets webenginewidgets
-CONFIG   += C++11
+QT        += core gui network widgets webengine webenginewidgets
+CONFIG    += C++14
 
-TARGET = QtSimpleWebBrowser
-TEMPLATE = app
+QMAKE_CXXFLAGS_RELEASE += -O2
 
-SOURCES += main.cpp\
-           mainwindow.cpp
+TARGET    = QtSimpleWebBrowser
+TEMPLATE  = app
+
+SOURCES  += main.cpp\
+            mainwindow.cpp
 
 HEADERS  += mainwindow.h
 
